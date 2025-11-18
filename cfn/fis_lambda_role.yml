@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Role for AWS FIS to interact with Lambda/S3/CloudWatch/Logs as per provided policy
+
+Parameters:
+  BucketNamePrefix:
+    Type: String
+    Default: fis-test-lambda
+    Description: Prefix for the S3 bucket name. The account ID is appended automatically.
+  ConfigPrefix:
+    Type: String
+    Default: FisConfigs
+    Description: S3 key prefix (folder) where configs are stored.
+
+Resources:
+  FisLambdaExperimentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: fis.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: FisLambdaExperimentPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: AllowFisToWriteAndDeleteFaultConfigurations
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub 'arn:aws:s3:::${BucketNamePrefix}-${AWS::AccountId}/${ConfigPrefix}/*'
+              - Sid: AllowFisToInspectLambdaFunctions
+                Effect: Allow
+                Action:
+                  - lambda:GetFunction
+                Resource: '*'
+              - Sid: AllowFisToDoTagLookups
+                Effect: Allow
+                Action:
+                  - tag:GetResources
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - cloudwatch:getMetricWidgetImage
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogDelivery
+                  - logs:PutResourcePolicy
+                  - logs:DescribeResourcePolicies
+                  - logs:DescribeLogGroups
+                Resource: '*'
+
+Outputs:
+  RoleArn:
+    Description: ARN of the FIS Lambda Experiment Role
+    Value: !GetAtt FisLambdaExperimentRole.Arn
