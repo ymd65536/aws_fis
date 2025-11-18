@@ -7,7 +7,7 @@
 ```bash
 aws cloudformation deploy \
   --stack-name aws-fis-s3-policy \
-  --template-file cfn/main.yml \
+  --template-file cfn/lambda.yml \
   --parameter-overrides BucketPrefix=fis-test-lambda2 \
   --capabilities CAPABILITY_NAMED_IAM
 ```
