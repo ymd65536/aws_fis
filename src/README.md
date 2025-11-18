@@ -32,28 +32,31 @@
 ### 基本的な使い方
 
 ```bash
+export AWS_ACCOUNT_ID=`aws sts get-caller-identity --output text --query Account`
 python create_experiment_template.py \
-  --role-arn arn:aws:iam::123456789012:role/FisLambdaExperimentRole \
-  --lambda-arns arn:aws:lambda:us-east-1:123456789012:function:my-function
+  --role-arn arn:aws:iam::$AWS_ACCOUNT_ID:role/FisLambdaExperimentRole \
+  --lambda-arns arn:aws:lambda:ap-northeast-1:$AWS_ACCOUNT_ID:function:my-function
 ```
 
 ### テンプレート作成のみ（実験は起動しない）
 
 ```bash
+export AWS_ACCOUNT_ID=`aws sts get-caller-identity --output text --query Account`
 python create_experiment_template.py \
-  --role-arn arn:aws:iam::123456789012:role/FisLambdaExperimentRole \
-  --lambda-arns arn:aws:lambda:us-east-1:123456789012:function:my-function \
+  --role-arn arn:aws:iam::$AWS_ACCOUNT_ID:role/FisLambdaExperimentRole \
+  --lambda-arns arn:aws:lambda:ap-northeast-1:$AWS_ACCOUNT_ID:function:my-function \
   --no-start
 ```
 
 ### 複数のLambda関数をターゲット
 
 ```bash
+export AWS_ACCOUNT_ID=`aws sts get-caller-identity --output text --query Account`
 python create_experiment_template.py \
-  --role-arn arn:aws:iam::123456789012:role/FisLambdaExperimentRole \
+  --role-arn arn:aws:iam::$AWS_ACCOUNT_ID:role/FisLambdaExperimentRole \
   --lambda-arns \
-    arn:aws:lambda:us-east-1:123456789012:function:function1 \
-    arn:aws:lambda:us-east-1:123456789012:function:function2 \
+    arn:aws:lambda:ap-northeast-1:$AWS_ACCOUNT_ID:function:function1 \
+    arn:aws:lambda:ap-northeast-1:$AWS_ACCOUNT_ID:function:function2 \
   --duration PT5M \
   --percentage 50
 ```
@@ -61,10 +64,11 @@ python create_experiment_template.py \
 ### S3ログ保存を有効化
 
 ```bash
+export AWS_ACCOUNT_ID=`aws sts get-caller-identity --output text --query Account`
 python create_experiment_template.py \
-  --role-arn arn:aws:iam::123456789012:role/FisLambdaExperimentRole \
-  --lambda-arns arn:aws:lambda:us-east-1:123456789012:function:my-function \
-  --log-bucket fis-test-lambda-123456789012
+  --role-arn arn:aws:iam::$AWS_ACCOUNT_ID:role/FisLambdaExperimentRole \
+  --lambda-arns arn:aws:lambda:ap-northeast-1:$AWS_ACCOUNT_ID:function:my-function \
+  --log-bucket fis-test-lambda-$AWS_ACCOUNT_ID
 ```
 
 ## パラメータ
@@ -78,7 +82,7 @@ python create_experiment_template.py \
 | `--duration` | - | `PT2M` | 実験継続時間（ISO 8601形式） |
 | `--percentage` | - | 100 | 影響を受けるターゲットの割合（0-100） |
 | `--log-bucket` | - | - | ログ保存先S3バケット名 |
-| `--region` | - | `us-east-1` | AWSリージョン |
+| `--region` | - | `ap-northeast-1` | AWSリージョン |
 | `--no-start` | - | False | テンプレート作成のみ行い、実験は起動しない |
 
 ## 利用可能なFISアクション（Lambda用）
