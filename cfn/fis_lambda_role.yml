@@ -32,7 +32,10 @@ Resources:
                 Action:
                   - s3:PutObject
                   - s3:DeleteObject
-                Resource: !Sub 'arn:aws:s3:::${BucketNamePrefix}-${AWS::AccountId}/${ConfigPrefix}/*'
+                Resource:
+                  - !Sub 'arn:aws:s3:::${BucketNamePrefix}-${AWS::AccountId}'
+                  - !Sub 'arn:aws:s3:::${BucketNamePrefix}-${AWS::AccountId}/*'
+                  - !Sub 'arn:aws:s3:::${BucketNamePrefix}-${AWS::AccountId}/${ConfigPrefix}/*'
               - Sid: AllowFisToInspectLambdaFunctions
                 Effect: Allow
                 Action:
