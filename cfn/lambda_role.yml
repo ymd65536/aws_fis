@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: IAM Managed Policy to allow listing and reading FIS configs from S3
 
 Parameters:
-  BucketPrefix:
+  BucketNamePrefix:
     Type: String
     Default: fis-test-lambda
     Description: Prefix of the S3 bucket name. Final bucket will be "<prefix>-<accountId>".
@@ -11,13 +11,13 @@ Resources:
   FisConfigBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${BucketPrefix}-${AWS::AccountId}"
+      BucketName: !Sub "${BucketNamePrefix}-${AWS::AccountId}"
 
   S3FisConfigsReadPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       ManagedPolicyName: S3FisConfigsReadPolicy
-      Description: Allow listing FisConfigs/ and reading objects in the bucket ${BucketPrefix}-${AWS::AccountId}
+      Description: Allow listing FisConfigs/ and reading objects in the bucket ${BucketNamePrefix}-${AWS::AccountId}
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -26,7 +26,7 @@ Resources:
             Action:
               - s3:ListBucket
             Resource:
-              - !Sub arn:aws:s3:::${BucketPrefix}-${AWS::AccountId}
+              - !Sub arn:aws:s3:::${BucketNamePrefix}-${AWS::AccountId}
             Condition:
               StringLike:
                 s3:prefix:
@@ -35,9 +35,9 @@ Resources:
             Effect: Allow
             Action: s3:GetObject
             Resource:
-              - !Sub arn:aws:s3:::${BucketPrefix}-${AWS::AccountId}/FisConfigs/*
+              - !Sub arn:aws:s3:::${BucketNamePrefix}-${AWS::AccountId}/FisConfigs/*
 
 Outputs:
   BucketName:
     Description: The S3 bucket name used for FIS configs
-    Value: !Sub "${BucketPrefix}-${AWS::AccountId}"
+    Value: !Sub "${BucketNamePrefix}-${AWS::AccountId}"

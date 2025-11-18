@@ -2,14 +2,19 @@
 
 ## Cloud FormationでIAMロールを作成する
 
-以下のコマンドを実行して、Cloud FormationでIAMロールを作成します。`BucketPrefix`パラメータは適宜変更してください。
+以下のコマンドを実行して、Cloud FormationでIAMロールを作成します。`BucketNamePrefix`パラメータは適宜変更してください。
 
 ```bash
 aws cloudformation deploy \
   --stack-name aws-fis-s3-policy \
   --template-file cfn/lambda.yml \
-  --parameter-overrides BucketPrefix=fis-test-lambda2 \
+  --parameter-overrides BucketNamePrefix=fis-test-lambda2 \
   --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation deploy \
+  --stack-name fis-lambda-role \
+  --template-file cfn/fis_lambda_role.yml \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides BucketNamePrefix=fis-test-lambda2
 ```
 
 ## AWS CLI インストールと SSO ログイン手順 (Linux環境)
