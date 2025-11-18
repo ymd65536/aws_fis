@@ -18,7 +18,7 @@ def create_experiment_template(
     description: str,
     role_arn: str,
     target_lambda_arns: list,
-    action_id: str = "aws:fis:inject-api-unavailable-error",
+    action_id: str = "aws:lambda:invocation-error",
     duration: str = "PT2M",
     percentage: int = 100,
     log_bucket: str = None,
@@ -60,7 +60,7 @@ def create_experiment_template(
                 "percentage": str(percentage)
             },
             "targets": {
-                "Functions": "lambda-functions"
+                "Lambdas": "lambda-functions"
             }
         }
     }
