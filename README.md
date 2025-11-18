@@ -1,4 +1,18 @@
-# AWS CLI インストールと SSO ログイン手順 (Linux環境)
+# AWS FISを試す
+
+## Cloud FormationでIAMロールを作成する
+
+以下のコマンドを実行して、Cloud FormationでIAMロールを作成します。`BucketPrefix`パラメータは適宜変更してください。
+
+```bash
+aws cloudformation deploy \
+  --stack-name aws-fis-s3-policy \
+  --template-file cfn/main.yml \
+  --parameter-overrides BucketPrefix=fis-test-lambda2 \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+## AWS CLI インストールと SSO ログイン手順 (Linux環境)
 
 このガイドでは、Linux環境でAWS CLIをインストールし、AWS SSOを使用してログインするまでの手順を説明します。
 
